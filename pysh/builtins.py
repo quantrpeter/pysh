@@ -8,7 +8,7 @@ import os
 import sys
 from typing import List, Callable, Dict
 
-from pysh.commands import CUSTOM_COMMANDS
+from pysh.commands import CUSTOM_COMMANDS, SHELL_COMMANDS
 
 
 def register_builtins(shell) -> Dict[str, Callable]:
@@ -242,8 +242,12 @@ def register_builtins(shell) -> Dict[str, Callable]:
             return 2
         return _evaluate_test(args[1:-1])
 
+    shell_cmds = {name: (lambda fn: lambda args: fn(args, shell=shell))(fn)
+                  for name, fn in SHELL_COMMANDS.items()}
+
     builtins = {
         **CUSTOM_COMMANDS,
+        **shell_cmds,
         'cd': builtin_cd,
         'pwd': builtin_pwd,
         'echo': builtin_echo,
