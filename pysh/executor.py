@@ -96,6 +96,8 @@ class Executor:
                     status = self._run_subshell(cmd)
                 else:
                     status = self._exec_simple_in_child(cmd)
+                sys.stdout.flush()
+                sys.stderr.flush()
                 os._exit(status)
             pids.append(pid)
 
@@ -116,6 +118,8 @@ class Executor:
         return self._exec_simple(cmd)
 
     def _run_subshell(self, sub: Subshell) -> int:
+        sys.stdout.flush()
+        sys.stderr.flush()
         pid = os.fork()
         if pid == 0:
             signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -137,9 +141,14 @@ class Executor:
 
         builtin_fn = self.shell.builtins.get(name)
         if builtin_fn is not None:
+            sys.stdout.flush()
+            sys.stderr.flush()
             saved_fds = self._setup_redirects(cmd.redirects)
             try:
-                return builtin_fn(args)
+                result = builtin_fn(args)
+                sys.stdout.flush()
+                sys.stderr.flush()
+                return result
             finally:
                 self._restore_fds(saved_fds)
 

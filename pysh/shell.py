@@ -64,7 +64,7 @@ class Shell:
 
         uid = os.getuid() if hasattr(os, 'getuid') else 1000
         symbol = '#' if uid == 0 else '$'
-        return f"\033[1;32m{user}@{host}\033[0m:\033[1;34m{cwd}\033[0m{symbol} "
+        return f"[PYSH] \033[1;32m{user}@{host}\033[0m:\033[1;34m{cwd}\033[0m{symbol} "
 
     def _expand_prompt(self, ps1: str) -> str:
         """Expand bash-style PS1 escape sequences."""

@@ -8,6 +8,8 @@ import os
 import sys
 from typing import List, Callable, Dict
 
+from pysh.commands import CUSTOM_COMMANDS
+
 
 def register_builtins(shell) -> Dict[str, Callable]:
     """Create and return a dict of builtin name -> function."""
@@ -241,6 +243,7 @@ def register_builtins(shell) -> Dict[str, Callable]:
         return _evaluate_test(args[1:-1])
 
     builtins = {
+        **CUSTOM_COMMANDS,
         'cd': builtin_cd,
         'pwd': builtin_pwd,
         'echo': builtin_echo,
