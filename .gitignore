@@ -11,3 +11,4 @@ build/
 venv/
 .env
 .pysh_history
+*.whl
